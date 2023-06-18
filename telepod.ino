@@ -11,6 +11,7 @@ void setup()
   bip(100,500);
   bip(100,1000);
   atualizar();
+  
   wifi_nome = escrita("Nome do WIFI:");
   wifi_password = escrita("Senha do WIFI:");
   initconect(wifi_nome,wifi_password);
@@ -21,7 +22,6 @@ void setup()
   drawtext("Done :D", ST77XX_CYAN, 50, 200);
   delay(300);
   atualizar();
-
   mensagem = escrita("mensagem ");
   drawtext("Mensagem eviada.", ST77XX_GREEN, 1, 15);
   drawtext(mensagem, ST77XX_WHITE, 0, 150);

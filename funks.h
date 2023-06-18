@@ -30,8 +30,7 @@ U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, /* clock=*/22, /* data=*/21, /
 #define BUZZER_PIN 12
 #define PWM_RESOLUTION 8
 
-
-char *alfabeto_caracteres[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z","9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "-", "_", " "};
+char *alfabeto_caracteres[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "-", "_", " "};
 
 void bip(int duracao, int tom)
 {
@@ -53,10 +52,7 @@ void setup_hardware()
     u8g2.begin();
     u8g2.enableUTF8Print();
     u8g2.setDisplayRotation(U8G2_R2);
-    u8g2.clearBuffer();
-    u8g2.setFont(u8g2_font_7x14_tf);
-    u8g2.drawStr(0, 40, "Iniciando...");
-    u8g2.sendBuffer();
+    
 
     pinMode(BUZZER_PIN, OUTPUT);
     ledcSetup(0, 1000, PWM_RESOLUTION);
@@ -82,6 +78,32 @@ void init_Sys()
 {
     setup_hardware();
     drawtext("RANDOOM COLORS", ST77XX_WHITE, 10, 130);
+    u8g2.setFont(u8g2_font_7x14_tf);
+    String init_text = "Iniciando...";
+    String init_escrevendo = "";
+    for(int i = 0; i <= 12; i++)
+    {
+        init_escrevendo += init_text[i];
+        u8g2.clearBuffer();
+        if(i%2 == 0)
+        {
+            u8g2.drawUTF8(0,20, "`-´");
+        }
+        else
+        {
+            u8g2.drawUTF8(0,20, "`o´");
+        }
+        u8g2.drawStr(0,40,String(init_escrevendo).c_str());
+        u8g2.sendBuffer();
+    }
+    delay(200);
+    u8g2.clearBuffer();
+    u8g2.setFont(u8g2_font_9x15_tf);
+    u8g2.drawUTF8(0,20, "`v´");
+    u8g2.setFont(u8g2_font_7x14_tf);
+    u8g2.drawStr(0,40,String(init_escrevendo).c_str());
+    u8g2.sendBuffer();
+    delay(200);
     // drawtext("`- \u00b4", ST77XX_WHITE, 10, 170);
 }
 
@@ -205,7 +227,7 @@ bool init_senha()
 int read_buttons()
 {
     unsigned long previousMillis = 0;
-    const unsigned long delayTime = 200;
+    const unsigned long delayTime = 150;
     bool new_frame = false;
     unsigned long currentMillis = millis();
     if (currentMillis - previousMillis >= delayTime)
@@ -221,19 +243,19 @@ int read_buttons()
         }
         else if (digitalRead(botBranco) == LOW)
         {
-            return 3;//baixo
+            return 3; // baixo
         }
         else if (digitalRead(botAzul) == LOW)
         {
-            return 4;//esquerda
+            return 4; // esquerda
         }
         else if (digitalRead(botAmarelo) == LOW)
         {
-            return 5;//cima
+            return 5; // cima
         }
         else if (digitalRead(botVermelho) == LOW)
         {
-            return 6;//direito
+            return 6; // direito
         }
         else
         {
@@ -246,48 +268,163 @@ String escrita(String titulo)
 {
     String texto_resposta = "";
     String letra_atual;
+    bool end_escrita = false;
     bool maiusculo = false;
+    bool new_frame_tela1 = false;
     u8g2.clearDisplay();
-    u8g2.setFont(u8g2_font_siji_t_6x10);
     int cursor_alfabeto = 0;
-    while(digitalRead(botB1) != LOW or digitalRead(botB2) != LOW)
+    int holding = 0;
+    while (end_escrita == false)
     {
+        if (new_frame_tela1 != false)
+        {
+            new_frame_tela1 = false;
+            atualizar();
+        }
         letra_atual = alfabeto_caracteres[cursor_alfabeto];
-        if(maiusculo == true)
+        if (maiusculo == true)
         {
             letra_atual.toUpperCase();
         }
         else
         {
-            letra_atual.toLowerCase();   
+            letra_atual.toLowerCase();
         }
-        drawtext(String(titulo).c_str(),ST77XX_CYAN, 2, 15);
-        do
-          {
-            u8g2.drawFrame(10, 20, 20, 20);
-            u8g2.setFont(u8g2_font_DigitalDiscoThin_tf);
-            u8g2.drawStr(13,36, String(letra_atual).c_str());
-        } while (u8g2.nextPage());
+        drawtext(String(titulo).c_str(), ST77XX_CYAN, 2, 15);
+        drawtext(String(texto_resposta).c_str(), ST77XX_WHITE, 2, 35);
+        // do
+        //   {
+
+        // } while (u8g2.nextPage());
+        //layout
+        u8g2.clearBuffer();
+        u8g2.drawFrame(5, 15, 20, 20);
+        u8g2.setFont(u8g2_font_9x15_tf);
+        u8g2.drawStr(10, 30, String(letra_atual).c_str());
+        u8g2.setFont(u8g2_font_siji_t_6x10);
+        u8g2.drawUTF8(9,13,"\ue0d0");
+        u8g2.drawUTF8(9,45,"\ue0d1");
+        u8g2.setFont(u8g2_font_9x15_tf);
+        u8g2.drawCircle(37,12,6);
+        u8g2.drawDisc(37,30,6);
+        u8g2.drawStr(47,17,"Delet");
+        u8g2.drawStr(47,35,"Hold");
+        u8g2.sendBuffer();
+        //
         switch (read_buttons())
         {
+        case 1:
+
+            while(digitalRead(botB1) == LOW)
+            {
+                holding++;
+                if(holding == 1)
+                {
+                    u8g2.clearBuffer();
+                    u8g2.drawStr(2,63, "Add word");
+                    u8g2.sendBuffer();
+                    delay(200);
+                }
+                else if(holding == 2)
+                {
+                    
+                    u8g2.clearBuffer();
+                    u8g2.drawStr(2,63, "capslock");
+                    u8g2.sendBuffer();
+                    delay(200);
+                }
+                else if(holding == 3)
+                {
+                    
+                    u8g2.clearBuffer();
+                    u8g2.drawStr(2,63, "Finalizar");
+                    u8g2.sendBuffer();
+                    delay(200);
+                }
+                else
+                {
+                    
+                }
+            }
+            switch (holding)
+            {
+            case 1:
+                texto_resposta += letra_atual;
+                break;
+            case 2:
+                maiusculo = !maiusculo;
+                break;
+            case 3:
+                end_escrita = true;
+                break;
+            default:
+                break;
+            }
+            holding = 0;
+            break;
+        case 2:
+            if (texto_resposta.length() > 0)
+            {
+                texto_resposta.remove(texto_resposta.length() - 1);
+                new_frame_tela1 = true;
+            }
+            break;
         case 3:
             cursor_alfabeto--;
+            if (cursor_alfabeto <= 0)
+            {
+                cursor_alfabeto = 38;
+            }
             break;
         case 4:
-            
+            cursor_alfabeto -= 10;
+            if(cursor_alfabeto < 0)
+            {
+                cursor_alfabeto = 38-(cursor_alfabeto * -1);
+            }
             break;
         case 5:
             cursor_alfabeto++;
+            if (cursor_alfabeto >= 38)
+            {
+                cursor_alfabeto = 0;
+            }
             break;
         case 6:
-            maiusculo = !maiusculo;
+            // maiusculo = !maiusculo;
+            cursor_alfabeto += 10;
+            if(cursor_alfabeto > 38)
+            {
+                cursor_alfabeto -= 38;
+            }
             break;
-        
+
         default:
             break;
         }
     }
-    return "A$AP";
+    while(true)
+    {
+        u8g2.clearBuffer();
+        u8g2.drawStr(2,63, "Sure?");
+        u8g2.drawCircle(37,12,6);
+        u8g2.drawDisc(37,30,6);
+        u8g2.drawStr(47,17,"No");
+        u8g2.drawStr(47,35,"Yes");
+        u8g2.sendBuffer();
+        if(read_buttons() == 1)
+        {
+            break;
+        }
+        else if(read_buttons() == 2)
+        {
+            atualizar();
+            escrita(titulo);
+        }
+    }
+    u8g2.clearBuffer();
+    u8g2.drawUTF8(64,30,"`v´");
+    u8g2.sendBuffer();
+    atualizar();
+    return texto_resposta;
 }
-
-
