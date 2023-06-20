@@ -427,4 +427,5 @@ String escrita(String titulo)
     u8g2.sendBuffer();
     atualizar();
     return texto_resposta;
+    
 }

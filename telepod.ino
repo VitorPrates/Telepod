@@ -1,33 +1,32 @@
 #include "funks.h"
 #include "communication.h"
+#include "campominado.h"
 
 String mensagem = "";
-String wifi_nome;
-String wifi_password;
+
 void setup()
 {
-  init_Sys();
-  delay(500);
-  bip(100,500);
-  bip(100,1000);
+  init_Sys();//main
   atualizar();
-  
-  wifi_nome = escrita("Nome do WIFI:");
-  wifi_password = escrita("Senha do WIFI:");
-  initconect(wifi_nome,wifi_password);
-  // init_senha();
-  delay(200);
-  atualizar();
-  bip(100, 1000);
-  drawtext("Done :D", ST77XX_CYAN, 50, 200);
-  delay(300);
-  atualizar();
-  mensagem = escrita("mensagem ");
-  drawtext("Mensagem eviada.", ST77XX_GREEN, 1, 15);
-  drawtext(mensagem, ST77XX_WHITE, 0, 150);
-  // drawtext("`´",ST77XX_WHITE, 0, 150);
-  enviar_mensagem(mensagem);
-  delay(100);
+  init_game_minesweeper();
+  // delay(500);
+  // bip(100,500);
+  // bip(100,1000);
+  // atualizar();
+  // initconect(escrita("Nome do WIFI:"),escrita("Senha do WIFI:"));
+  // // init_senha();
+  // delay(200);
+  // atualizar();
+  // bip(100, 1000);
+  // drawtext("Done :D", ST77XX_CYAN, 50, 200);
+  // delay(300);
+  // atualizar();
+  // mensagem = escrita("mensagem ");
+  // drawtext("Mensagem eviada.", ST77XX_GREEN, 1, 15);
+  // drawtext(mensagem, ST77XX_WHITE, 0, 150);
+  // // drawtext("`´",ST77XX_WHITE, 0, 150);
+  // enviar_mensagem(mensagem);
+  // delay(100);
 }
 
 void loop()
