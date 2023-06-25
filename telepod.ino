@@ -6,12 +6,12 @@ String mensagem = "";
 
 void setup()
 {
-  init_Sys();//main
+  init_Sys();//main, init hardware, inicia o hardware
+  bip(100,500);
+  bip(100,1000);
   atualizar();
   init_game_minesweeper();
   // delay(500);
-  // bip(100,500);
-  // bip(100,1000);
   // atualizar();
   // initconect(escrita("Nome do WIFI:"),escrita("Senha do WIFI:"));
   // // init_senha();
@@ -31,10 +31,21 @@ void setup()
 
 void loop()
 {
-  if(digitalRead(botB1) == LOW && digitalRead(botB2) == LOW)
-  {
-    setup();
-  }
+  // int buttonState = digitalRead(19);
+
+  // // Verifica se o botão foi pressionado
+  // if (buttonState == HIGH) {
+  //   u8g2.clearBuffer();
+  //   u8g2.drawStr(2, 32, String("A").c_str());
+  //   u8g2.sendBuffer();
+  //   delay(100);
+  // }
+  // else
+  // {
+  //   u8g2.clearBuffer();
+  //   u8g2.drawStr(2, 32, String("a").c_str());
+  //   u8g2.sendBuffer();
+  // }
 }
 
 // A:  - 1 - 1 1 1 - ↓ ↓ ↓

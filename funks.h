@@ -5,6 +5,7 @@
 #include <Adafruit_ST7789.h>
 #include <SPI.h>
 #include <Fonts/FreeMono12pt7b.h>
+#include <Fonts/FreeMono9pt7b.h>
 
 // display 128x64
 #include <Wire.h>
@@ -77,7 +78,8 @@ void drawtext(String text, uint16_t color, int posx, int posy)
 void init_Sys()
 {
     setup_hardware();
-    drawtext("RANDOOM COLORS", ST77XX_WHITE, 10, 130);
+    drawtext("TELEPOD", ST77XX_WHITE, 10, 130);
+    drawtext("RANDOOM COLORS", ST77XX_WHITE, 0, 230);
     u8g2.setFont(u8g2_font_7x14_tf);
     String init_text = "Iniciando...";
     String init_escrevendo = "";
