@@ -12,9 +12,9 @@ void setup()
   atualizar();
   init_game_minesweeper();
   // delay(500);
-  // atualizar();
+  atualizar();
   // initconect(escrita("Nome do WIFI:"),escrita("Senha do WIFI:"));
-  // // init_senha();
+  init_senha();
   // delay(200);
   // atualizar();
   // bip(100, 1000);

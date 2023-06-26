@@ -39,6 +39,7 @@ void bip(int duracao, int tom)
     delay(duracao);
     ledcWriteTone(0, 0);
 }
+
 void setup_hardware()
 {
     // 240x240
